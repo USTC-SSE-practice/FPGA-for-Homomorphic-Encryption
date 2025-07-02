@@ -51,7 +51,7 @@ The project implements a **** additive semi-homomorphic encryption using the Pai
 ### Steps
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/FPGA-Homomorphic-Encryption.git
+   git clone https://github.com/USTC-SSE-practice/FPGA-Homomorphic-Encryption.git
    cd FPGA-Homomorphic-Encryption
 
 
