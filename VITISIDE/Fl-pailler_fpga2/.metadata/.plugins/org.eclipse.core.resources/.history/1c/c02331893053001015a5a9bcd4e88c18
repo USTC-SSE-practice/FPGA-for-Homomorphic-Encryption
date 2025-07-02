@@ -1,0 +1,161 @@
+#include "xpaillier_fl_kernel.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include "ff.h"
+#include "xil_printf.h"
+#include "xil_types.h"
+#include "xuartps.h"
+
+// Define types
+typedef unsigned long long paillier_uint64_t;
+
+// UART instance
+XUartPs Uart_PS; // UART device driver instance
+
+// Dataset structure
+typedef struct {
+    paillier_uint64_t* features;
+    size_t count;
+} Dataset;
+
+// Function prototypes
+Dataset load_data_from_csv(const char* filename);
+void free_dataset(Dataset* dataset);
+void generate_keys(paillier_uint64_t *N, paillier_uint64_t *N2, paillier_uint64_t *G,
+                   paillier_uint64_t *LAMBDA, paillier_uint64_t *mu,
+                   paillier_uint64_t *R, paillier_uint64_t *N_PRIME);
+paillier_uint64_t paillier_encrypt(paillier_uint64_t m, paillier_uint64_t r,
+                                   paillier_uint64_t N, paillier_uint64_t N2,
+                                   paillier_uint64_t G, paillier_uint64_t R,
+                                   paillier_uint64_t N_PRIME);
+paillier_uint64_t paillier_decrypt(paillier_uint64_t c, paillier_uint64_t N,
+                                   paillier_uint64_t N2, paillier_uint64_t LAMBDA,
+                                   paillier_uint64_t mu, paillier_uint64_t R,
+                                   paillier_uint64_t N_PRIME);
+
+paillier_uint64_t mod_mul(paillier_uint64_t a, paillier_uint64_t b, paillier_uint64_t n);
+paillier_uint64_t mod_exp(paillier_uint64_t base, paillier_uint64_t exp, paillier_uint64_t n);
+
+// UART initialization
+int InitUART() {
+    XUartPs_Config* Config;
+    int Status;
+
+    Config = XUartPs_LookupConfig(XPAR_XUARTPS_0_DEVICE_ID);
+    if (NULL == Config) {
+        return XST_FAILURE;
+    }
+
+    Status = XUartPs_CfgInitialize(&Uart_PS, Config, Config->BaseAddress);
+    if (Status != XST_SUCCESS) {
+        return XST_FAILURE;
+    }
+
+    XUartPs_SetBaudRate(&Uart_PS, XPAR_XUARTPS_0_CLOCK_HZ, 115200);
+
+    return XST_SUCCESS;
+}
+
+// Command processing
+void process_command(char* cmd, paillier_uint64_t N, paillier_uint64_t N2,
+                     paillier_uint64_t G, paillier_uint64_t R, paillier_uint64_t N_PRIME,
+                     paillier_uint64_t LAMBDA, paillier_uint64_t mu) {
+
+    if (strncmp(cmd, "ENCRYPT ", 8) == 0) {
+        paillier_uint64_t m = atoll(cmd + 8);
+        paillier_uint64_t r = 7; // Fixed random value for demo
+        paillier_uint64_t encrypted = paillier_encrypt(m, r, N, N2, G, R, N_PRIME);
+        xil_printf("RESULT %llu\r\n", encrypted);
+    }
+    else if (strcmp(cmd, "TEST") == 0) {
+        paillier_uint64_t test_val = 123 % N;
+        paillier_uint64_t r = 7;
+        paillier_uint64_t encrypted = paillier_encrypt(test_val, r, N, N2, G, R, N_PRIME);
+        paillier_uint64_t decrypted = paillier_decrypt(encrypted, N, N2, LAMBDA, mu, R, N_PRIME);
+        xil_printf("TEST_RESULT Original: %llu Encrypted: %llu Decrypted: %llu Result: %s\r\n",
+                  test_val, encrypted, decrypted, (decrypted == test_val ? "PASS" : "FAIL"));
+    }
+    else if (strcmp(cmd, "LOAD_DATA") == 0) {
+        Dataset dataset = load_data_from_csv("0:/breast-cancer.csv");
+        if (dataset.count > 0) {
+            xil_printf("DATASET_LOADED %zu features loaded\r\n", dataset.count);
+            free_dataset(&dataset);
+        } else {
+            xil_printf("ERROR No feature loaded\r\n");
+        }
+    }
+    else if (strcmp(cmd, "START_KERNEL") == 0) {
+        xil_printf("Starting FL kernel...\r\n");
+
+        // Simulate running FL logic
+        XPaillier_fl_kernel paillier_kernel;
+        XPaillier_fl_kernel_Config* cfg = XPaillier_fl_kernel_LookupConfig(XPAR_PAILLIER_FL_KERNEL_0_DEVICE_ID);
+        if (!cfg) {
+            xil_printf("ERROR: Failed to lookup kernel configuration\r\n");
+            return;
+        }
+
+        int status = XPaillier_fl_kernel_CfgInitialize(&paillier_kernel, cfg);
+        if (status != XST_SUCCESS) {
+            xil_printf("ERROR: Failed to initialize kernel\r\n");
+            return;
+        }
+
+        Dataset dataset = load_data_from_csv("0:/breast-cancer.csv");
+        if (dataset.count == 0) {
+            xil_printf("ERROR: No feature loaded\r\n");
+            return;
+        }
+
+        int num_clients = 4;
+        XPaillier_fl_kernel_Set_num_samples(&paillier_kernel, dataset.count);
+        XPaillier_fl_kernel_Set_num_clients(&paillier_kernel, num_clients);
+        XPaillier_fl_kernel_Start(&paillier_kernel);
+
+        while (!XPaillier_fl_kernel_IsReady(&paillier_kernel)) {
+            // Busy wait
+        }
+
+        xil_printf("FL_KERNEL_STARTED\r\n");
+    }
+    else {
+        xil_printf("UNKNOWN_COMMAND\r\n");
+    }
+}
+
+int main(int argc, char** argv) {
+
+    // Initialize UART
+    if (InitUART() != XST_SUCCESS) {
+        xil_printf("ERROR: UART initialization failed\r\n");
+        return -1;
+    }
+
+    // Initialize Paillier keys
+    paillier_uint64_t N, N2, G, LAMBDA, mu, R, N_PRIME;
+    generate_keys(&N, &N2, &G, &LAMBDA, &mu, &R, &N_PRIME);
+
+    xil_printf("FPGA Ready. Waiting for commands...\r\n");
+
+    // UART buffer
+    char buffer[128];
+    int idx = 0;
+
+    while (1) {
+        char c;
+        if (XUartPs_Recv(&Uart_PS, (u8*)&c, 1) > 0) {
+            if (c == '\r' || c == '\n') {
+                buffer[idx] = '\0';
+                xil_printf("CMD: %s\r\n", buffer); // Echo command
+                process_command(buffer, N, N2, G, R, N_PRIME, LAMBDA, mu);
+                idx = 0;
+            } else {
+                buffer[idx++] = c;
+            }
+        }
+    }
+
+    return 0;
+}

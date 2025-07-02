@@ -1,0 +1,109 @@
+#include "xpaillier_fl_kernel.h"
+#include "xuartps.h"  // Required for UART communication
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include "ff.h"
+#include "xil_printf.h"
+#include "xil_types.h"
+
+// Define types for compatibility
+typedef unsigned long long paillier_uint64_t;
+
+// UART external declaration
+extern XUartPs Uart_PS; // Assuming UART is initialized elsewhere in your system
+
+// Data structure for CSV parsing
+typedef struct {
+    paillier_uint64_t* features;
+    size_t count;
+} Dataset;
+
+// Function prototypes
+Dataset load_data_from_csv(const char* filename);
+void free_dataset(Dataset* dataset);
+void generate_keys(paillier_uint64_t *N, paillier_uint64_t *N2, paillier_uint64_t *G,
+                   paillier_uint64_t *LAMBDA, paillier_uint64_t *mu,
+                   paillier_uint64_t *R, paillier_uint64_t *N_PRIME);
+paillier_uint64_t paillier_encrypt(paillier_uint64_t m, paillier_uint64_t r,
+                                   paillier_uint64_t N, paillier_uint64_t N2,
+                                   paillier_uint64_t G, paillier_uint64_t R,
+                                   paillier_uint64_t N_PRIME);
+paillier_uint64_t paillier_decrypt(paillier_uint64_t c, paillier_uint64_t N,
+                                   paillier_uint64_t N2, paillier_uint64_t LAMBDA,
+                                   paillier_uint64_t mu, paillier_uint64_t R,
+                                   paillier_uint64_t N_PRIME);
+
+// -----------------------------
+// New UART Processing Function
+// -----------------------------
+void process_incoming_data() {
+    char buffer[128];
+    int idx = 0;
+    paillier_uint64_t features[1024]; // Adjust size based on expected input
+    int feature_count = 0;
+
+    xil_printf("Waiting for data...\r\n");
+
+    while (feature_count < 1000) { // Limit to max features
+        char c;
+        if (XUartPs_Recv(&Uart_PS, (u8*)&c, 1) > 0) {
+            if (c == '\n' || c == '\r') {
+                buffer[idx] = '\0';
+                if (strcmp(buffer, "DONE") == 0) {
+                    break;
+                }
+                features[feature_count++] = atoi(buffer);
+                idx = 0;
+            } else {
+                buffer[idx++] = c;
+            }
+        }
+    }
+
+    xil_printf("Received %d features\r\n", feature_count);
+
+    // Simulate federated learning steps here
+    paillier_uint64_t sum = 0;
+    for (int i = 0; i < feature_count; i++) {
+        sum += features[i]; // In real case, encrypt and aggregate
+    }
+
+    xil_printf("Encrypted sum: %llu\r\n", sum); // Or encrypted version
+    xil_printf("Decrypted aggregated model: %llu\r\n", sum); // Echo back
+}
+
+// -----------------------------
+// Main Function
+// -----------------------------
+int main(int argc, char** argv) {
+    // Initialize the kernel
+    XPaillier_fl_kernel paillier_kernel;
+    XPaillier_fl_kernel_Config* cfg;
+    cfg = XPaillier_fl_kernel_LookupConfig(XPAR_PAILLIER_FL_KERNEL_0_DEVICE_ID);
+    if (!cfg) {
+        xil_printf("ERROR: Failed to lookup kernel configuration\r\n");
+        return -1;
+    }
+
+    int status = XPaillier_fl_kernel_CfgInitialize(&paillier_kernel, cfg);
+    if (status != XST_SUCCESS) {
+        xil_printf("ERROR: Failed to initialize kernel\r\n");
+        return -1;
+    }
+
+
+
+    // Run UART-based processing
+    process_incoming_data();
+
+    // Clean up dataset if loaded
+    if (dataset.count > 0) {
+        free_dataset(&dataset);
+    }
+
+    xil_printf("Kernel execution completed successfully\r\n");
+
+    return 0;
+}

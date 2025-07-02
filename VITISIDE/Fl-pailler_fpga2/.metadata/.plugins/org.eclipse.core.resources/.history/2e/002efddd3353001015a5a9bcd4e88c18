@@ -1,0 +1,339 @@
+#include "xpaillier_fl_kernel.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include "ff.h"
+#include "xil_printf.h"
+#include "xil_types.h"
+#include "xuartps.h"
+
+
+// Define types for compatibility
+typedef unsigned long long paillier_uint64_t;
+//typedef unsigned int u32;
+
+// Data structure for CSV parsing
+typedef struct {
+    paillier_uint64_t* features;
+    size_t count;
+} Dataset;
+
+// Function prototypes
+Dataset load_data_from_csv(const char* filename);
+void free_dataset(Dataset* dataset);
+void generate_keys(paillier_uint64_t *N, paillier_uint64_t *N2, paillier_uint64_t *G,
+                  paillier_uint64_t *LAMBDA, paillier_uint64_t *mu,
+                  paillier_uint64_t *R, paillier_uint64_t *N_PRIME);
+paillier_uint64_t paillier_encrypt(paillier_uint64_t m, paillier_uint64_t r,
+                                  paillier_uint64_t N, paillier_uint64_t N2,
+                                  paillier_uint64_t G, paillier_uint64_t R,
+                                  paillier_uint64_t N_PRIME);
+paillier_uint64_t paillier_decrypt(paillier_uint64_t c, paillier_uint64_t N,
+                                  paillier_uint64_t N2, paillier_uint64_t LAMBDA,
+                                  paillier_uint64_t mu, paillier_uint64_t R,
+                                  paillier_uint64_t N_PRIME);
+
+int main(int argc, char** argv) {
+    // Initialize the kernel
+    XPaillier_fl_kernel paillier_kernel;
+    XPaillier_fl_kernel_Config* cfg;
+
+    cfg = XPaillier_fl_kernel_LookupConfig(XPAR_PAILLIER_FL_KERNEL_0_DEVICE_ID);
+    if (!cfg) {
+    	xil_printf("ERROR: Failed to lookup kernel configuration\n");
+        return -1;
+    }
+
+    int status = XPaillier_fl_kernel_CfgInitialize(&paillier_kernel, cfg);
+    if (status != XST_SUCCESS) {
+    	xil_printf("ERROR: Failed to initialize kernel\n");
+        return -1;
+    }
+
+    // Load data
+   // Dataset dataset = load_data_from_csv("0:/breast-cancer.csv");
+   // if (dataset.count == 0) {
+    	//xil_printf("ERROR: No feature loaded\n");
+
+        //return -1;
+    //}
+
+
+   // xil_printf("Loaded %zu features\n", dataset.count);
+
+    // Find max feature value
+   // paillier_uint64_t max_feature = 0;
+    //for (size_t i = 0; i < dataset.count; i++) {
+        //if (dataset.features[i] > max_feature) {
+        //    max_feature = dataset.features[i];
+        //}
+    //}
+
+
+        	extern XUartPs Uart_PS; // Assuming UART is initialized elsewhere
+
+        	void process_incoming_data() {
+        	    char buffer[128];
+        	    int idx = 0;
+        	    paillier_uint64_t features[1024]; // Adjust size based on expected input
+        	    int feature_count = 0;
+
+        	    xil_printf("Waiting for data...\r\n");
+
+        	    while (feature_count < 1000) { // Limit to max features
+        	        char c;
+        	        if (XUartPs_Recv(&Uart_PS, (u8*)&c, 1) > 0) {
+        	            if (c == '\n' || c == '\r') {
+        	                buffer[idx] = '\0';
+        	                if (strcmp(buffer, "DONE") == 0) {
+        	                    break;
+        	                }
+        	                features[feature_count++] = atoi(buffer);
+        	                idx = 0;
+        	            } else {
+        	                buffer[idx++] = c;
+        	            }
+        	        }
+        	    }
+
+        	    xil_printf("Received %d features\r\n", feature_count);
+
+
+
+
+
+    // Set kernel parameters
+    int num_clients = 4;
+    XPaillier_fl_kernel_Set_num_samples(&paillier_kernel, dataset.count);
+    XPaillier_fl_kernel_Set_num_clients(&paillier_kernel, num_clients);
+
+    // Start the kernel
+    XPaillier_fl_kernel_Start(&paillier_kernel);
+
+    // Wait for kernel to be ready
+    while (!XPaillier_fl_kernel_IsReady(&paillier_kernel)) {
+        // Busy wait (in real application, consider adding delay)
+    }
+
+    // Generate Paillier keys (host side for verification)
+    paillier_uint64_t N, N2, G, LAMBDA, mu, R, N_PRIME;
+    generate_keys(&N, &N2, &G, &LAMBDA, &mu, &R, &N_PRIME);
+    xil_printf("Generated keys - N: %llu, N2: %llu, G: %llu\n", N, N2, G);
+
+    // Simulate federated learning with encryption/decryption
+    // Split data into client batches
+    paillier_uint64_t** client_batches = (paillier_uint64_t**)malloc(num_clients * sizeof(paillier_uint64_t*));
+    size_t* batch_sizes = (size_t*)calloc(num_clients, sizeof(size_t));
+
+    // First pass to count sizes
+    for (size_t i = 0; i < dataset.count; i++) {
+        batch_sizes[i % num_clients]++;
+    }
+
+    // Allocate memory
+    for (int c = 0; c < num_clients; c++) {
+        client_batches[c] = (paillier_uint64_t*)malloc(batch_sizes[c] * sizeof(paillier_uint64_t));
+    }
+
+    // Second pass to populate data
+    size_t* current_pos = (size_t*)calloc(num_clients, sizeof(size_t));
+    for (size_t i = 0; i < dataset.count; i++) {
+        int client_idx = i % num_clients;
+        client_batches[client_idx][current_pos[client_idx]++] = dataset.features[i];
+    }
+    free(current_pos);
+
+    // Encrypt each client's batch
+    paillier_uint64_t** encrypted_batches = (paillier_uint64_t**)malloc(num_clients * sizeof(paillier_uint64_t*));
+    for (int c = 0; c < num_clients; c++) {
+        encrypted_batches[c] = (paillier_uint64_t*)malloc(batch_sizes[c] * sizeof(paillier_uint64_t));
+        for (size_t i = 0; i < batch_sizes[c]; i++) {
+            paillier_uint64_t r = 7; // Fixed random value for demo
+            encrypted_batches[c][i] = paillier_encrypt(client_batches[c][i] % N, r, N, N2, G, R, N_PRIME);
+        }
+    }
+
+    // Aggregate encrypted gradients (homomorphic addition)
+    paillier_uint64_t* encrypted_model = NULL;
+    size_t model_size = 0;
+    if (num_clients > 0 && batch_sizes[0] > 0) {
+        model_size = batch_sizes[0];
+        encrypted_model = (paillier_uint64_t*)malloc(model_size * sizeof(paillier_uint64_t));
+
+        // Initialize with 1 (multiplicative identity)
+        for (size_t i = 0; i < model_size; i++) {
+            encrypted_model[i] = 1;
+        }
+
+        // Multiply all encrypted values (homomorphic addition)
+        for (int c = 0; c < num_clients; c++) {
+            for (size_t i = 0; i < batch_sizes[c]; i++) {
+                encrypted_model[i] = (encrypted_model[i] * encrypted_batches[c][i]) % N2;
+            }
+        }
+    }
+
+    // Decrypt the aggregated model
+    paillier_uint64_t* decrypted_model = NULL;
+    if (encrypted_model) {
+        decrypted_model = (paillier_uint64_t*)malloc(model_size * sizeof(paillier_uint64_t));
+        for (size_t i = 0; i < model_size; i++) {
+            decrypted_model[i] = paillier_decrypt(encrypted_model[i], N, N2, LAMBDA, mu, R, N_PRIME);
+        }
+    }
+
+    // Print results
+    xil_printf("Decrypted aggregated model (first 10 values):\n");
+    size_t print_count = model_size < 10 ? model_size : 10;
+    for (size_t i = 0; i < print_count; i++) {
+    	xil_printf("%llu ", decrypted_model[i]);
+    }
+    printf("\n");
+
+
+    paillier_uint64_t test_val = 123 % N;
+    paillier_uint64_t r = 7;
+    paillier_uint64_t encrypted = paillier_encrypt(test_val, r, N, N2, G, R, N_PRIME);
+    paillier_uint64_t decrypted = paillier_decrypt(encrypted, N, N2, LAMBDA, mu, R, N_PRIME);
+    xil_printf("Encryption/Decryption Test:\n");
+    xil_printf("  Original: %llu\n", test_val);
+    xil_printf("  Encrypted: %llu\n", encrypted);
+    xil_printf("  Decrypted: %llu\n", decrypted);
+    xil_printf("  Result: %s\n", decrypted == test_val ? "PASS" : "FAIL");
+
+    // Wait for kernel to complete
+    while (!XPaillier_fl_kernel_IsDone(&paillier_kernel)) {
+        // Busy wait (in real application, consider adding delay)
+    }
+
+    xil_printf("Kernel execution completed successfully\n");
+
+    // Clean up
+    free_dataset(&dataset);
+
+    for (int c = 0; c < num_clients; c++) {
+        free(client_batches[c]);
+        free(encrypted_batches[c]);
+    }
+    free(client_batches);
+    free(encrypted_batches);
+    free(batch_sizes);
+
+    if (encrypted_model) free(encrypted_model);
+    if (decrypted_model) free(decrypted_model);
+
+    return 0;
+}
+
+// Function to load data from CSV file
+Dataset load_data_from_csv(const char* filename) {
+    Dataset dataset = {NULL, 0};
+    FILE* file = fopen(filename, "r");
+    if (!file) {
+        xil_printf(stderr, "Error opening %s\n", filename);
+        return dataset;
+    }
+
+    // First pass to count lines
+    size_t line_count = 0;
+    char buffer[1024];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        line_count++;
+    }
+    rewind(file);
+
+    // Allocate memory (we'll skip the header and malformed lines)
+    dataset.features = (paillier_uint64_t*)malloc((line_count - 1) * sizeof(paillier_uint64_t));
+    if (!dataset.features) {
+        fclose(file);
+        return dataset;
+    }
+
+    // Skip header
+    fgets(buffer, sizeof(buffer), file);
+
+    // Read data
+    while (fgets(buffer, sizeof(buffer), file)) {
+        char* token = strtok(buffer, ",");
+        if (!token) continue; // Skip empty lines
+
+        // Skip first three columns
+        for (int i = 0; i < 3; i++) {
+            token = strtok(NULL, ",");
+            if (!token) continue;
+        }
+        // Now token points to the 4th column
+        double value = atof(token);
+        dataset.features[dataset.count++] = (paillier_uint64_t)(value * 100);
+    }
+
+    fclose(file);
+    return dataset;
+}
+
+void free_dataset(Dataset* dataset) {
+    if (dataset->features) {
+        free(dataset->features);
+        dataset->features = NULL;
+    }
+    dataset->count = 0;
+}
+
+// Stub implementations of Paillier functions (from your original code)
+void generate_keys(paillier_uint64_t *N, paillier_uint64_t *N2, paillier_uint64_t *G,
+                  paillier_uint64_t *LAMBDA, paillier_uint64_t *mu,
+                  paillier_uint64_t *R, paillier_uint64_t *N_PRIME) {
+    paillier_uint64_t p = 53;
+    paillier_uint64_t q = 59;
+    *N = p * q;
+    *N2 = *N * *N;
+    *G = *N + 1;
+    *LAMBDA = (*N - p - q + 1) / 2; // Simplified for this example
+    *mu = 1; // Simplified for this example
+    *R = 1;
+    *N_PRIME = 1;
+}
+
+paillier_uint64_t mod_mul(paillier_uint64_t a, paillier_uint64_t b, paillier_uint64_t n) {
+    paillier_uint64_t result = 0;
+    for (int i = 0; i < 64; i++) {
+        if (b & 1) {
+            result = (result + a) % n;
+        }
+        a = (a << 1) % n;
+        b >>= 1;
+    }
+    return result;
+}
+
+paillier_uint64_t mod_exp(paillier_uint64_t base, paillier_uint64_t exp, paillier_uint64_t n) {
+    paillier_uint64_t result = 1;
+    base = base % n;
+    for (int i = 0; i < 64; i++) {
+        if (exp & 1) {
+            result = mod_mul(result, base, n);
+        }
+        base = mod_mul(base, base, n);
+        exp >>= 1;
+    }
+    return result;
+}
+
+paillier_uint64_t paillier_encrypt(paillier_uint64_t m, paillier_uint64_t r,
+                                  paillier_uint64_t N, paillier_uint64_t N2,
+                                  paillier_uint64_t G, paillier_uint64_t R,
+                                  paillier_uint64_t N_PRIME) {
+    paillier_uint64_t gm = mod_exp(G, m, N2);
+    paillier_uint64_t rn = mod_exp(r, N, N2);
+    return mod_mul(gm, rn, N2);
+}
+
+paillier_uint64_t paillier_decrypt(paillier_uint64_t c, paillier_uint64_t N,
+                                  paillier_uint64_t N2, paillier_uint64_t LAMBDA,
+                                  paillier_uint64_t mu, paillier_uint64_t R,
+                                  paillier_uint64_t N_PRIME) {
+    paillier_uint64_t cl = mod_exp(c, LAMBDA, N2);
+    paillier_uint64_t L = (cl - 1) / N;
+    return mod_mul(L, mu, N);
+}

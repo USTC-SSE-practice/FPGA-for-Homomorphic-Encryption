@@ -1,0 +1,25 @@
+--- !Passed
+Pass:            inline
+Name:            AlwaysInline
+DebugLoc:        { File: src/paillier_hls.cpp, Line: 182, Column: 13 }
+Function:        _Z18paillier_fl_kernelRN3hls6streamI6axis_tLi0EEES3_S3_ii
+Args:            
+  - String:          'Inlining function '''
+  - Callee:          'ap_int_base<1, false>::operator unsigned long long() const'
+    DebugLoc:        { File: 'C:/Xilinx/Vitis_HLS/2022.2/common/technology/autopilot\ap_int_base.h', 
+                       Line: 541, Column: 0 }
+  - String:          ''' into '''
+  - Caller:          'paillier_fl_kernel(hls::stream<axis_t, 0>&, hls::stream<axis_t, 0>&, hls::stream<axis_t, 0>&, int, int)'
+    DebugLoc:        { File: src/paillier_hls.cpp, Line: 169, Column: 0 }
+  - String:          ''''
+...
+--- !Missed
+Pass:            pasta-interface-builder
+Name:            UnsupportArrayToStream
+DebugLoc:        { File: src/paillier_hls.cpp, Line: 169, Column: 0 }
+Function:        _Z18paillier_fl_kernelRN3hls6streamI6axis_tLi0EEES3_S3_ii
+Args:            
+  - String:          'Implementing stream: may cause mismatch if read and write accesses are not in sequential order on port '''
+  - Name:            grad_stream
+  - String:          ''''
+...

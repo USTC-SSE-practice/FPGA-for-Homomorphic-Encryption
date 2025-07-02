@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item key="FL_Paillier_FPGA_APP_system-bitFile" value="${project_loc:FL_Paillier_FPGA_APP}/_ide/bitstream/design_1_wrapper.bit"/>
+	<item key="FL_Paillier_FPGA_APP_system-bmmFile" value=""/>
+	<item key="FL_Paillier_FPGA_APP_system-target" value="Local"/>
+	<item key="FL_Paillier_FPGA_APP_system-device" value="Auto Detect"/>
+	<item key="FL_Paillier_FPGA_APP_system-partial_bit" value="false"/>
+	<item key="FL_Paillier_FPGA_APP_system-skip_rev_check" value="false"/>
+	<item key="programfpga.sdxproject" value="FL_Paillier_FPGA_APP_system"/>
+	<item key="devices_info_Local" value="{&quot;cables&quot;:[{&quot;name&quot;:&quot;Digilent Zed 210248A27634&quot;,&quot;indexContextMap&quot;:{&quot;2&quot;:&quot;jsn-Zed-210248A27634-4ba00477-0&quot;,&quot;3&quot;:&quot;jsn-Zed-210248A27634-23727093-0&quot;}}]}"/>
+</section>

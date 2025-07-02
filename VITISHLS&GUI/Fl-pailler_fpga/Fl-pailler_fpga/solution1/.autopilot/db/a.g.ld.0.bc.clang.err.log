@@ -1,0 +1,2 @@
+remark: src/paillier_hls.cpp:182:13: Inlining function 'ap_int_base<1, false>::operator unsigned long long() const' into 'paillier_fl_kernel(hls::stream<axis_t, 0>&, hls::stream<axis_t, 0>&, hls::stream<axis_t, 0>&, int, int)'
+remark: src/paillier_hls.cpp:169:0: Implementing stream: may cause mismatch if read and write accesses are not in sequential order on port 'grad_stream'

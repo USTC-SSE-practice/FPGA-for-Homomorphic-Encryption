@@ -1,0 +1,141 @@
+<profile>
+
+<section name = "Vitis HLS Report for 'paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1'" level="0">
+<item name = "Date">Sat Jun 21 16:57:09 2025
+</item>
+<item name = "Version">2022.2 (Build 3670227 on Oct 13 2022)</item>
+<item name = "Project">Fl-pailler_fpga</item>
+<item name = "Solution">solution1 (Vivado IP Flow Target)</item>
+<item name = "Product family">zynq</item>
+<item name = "Target device">xc7z020-clg484-1</item>
+</section>
+
+<section name = "Performance Estimates" level="0">
+<item name = "Timing">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="4">Clock, Target, Estimated, Uncertainty</keys>
+<column name="ap_clk">10.00 ns, 4.110 ns, 2.70 ns</column>
+</table>
+</item>
+</section>
+</item>
+<item name = "Latency">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="8">, min, max, min, max, min, max, Type</keys>
+<column name="">?, ?, ?, ?, ?, ?, no</column>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="0">
+<keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
+</table>
+</item>
+<item name = "Loop"><table name="" hasTotal="0">
+<keys size="8">Loop Name, min, max, Latency, achieved, target, Count, Pipelined</keys>
+<column name="- VITIS_LOOP_178_1">?, ?, 2, 1, 1, ?, yes</column>
+</table>
+</item>
+</section>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Utilization Estimates" level="0">
+<item name = "Summary"><table name="" hasTotal="1">
+<keys size="6">Name, BRAM_18K, DSP, FF, LUT, URAM</keys>
+<column name="DSP">-, -, -, -, -</column>
+<column name="Expression">-, -, 0, 69, -</column>
+<column name="FIFO">-, -, -, -, -</column>
+<column name="Instance">-, -, -, -, -</column>
+<column name="Memory">-, -, -, -, -</column>
+<column name="Multiplexer">-, -, -, 63, -</column>
+<column name="Register">-, -, 167, -, -</column>
+<specialColumn name="Available">280, 220, 106400, 53200, 0</specialColumn>
+<specialColumn name="Utilization (%)">0, 0, ~0, ~0, 0</specialColumn>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="1">
+<keys size="7">Instance, Module, BRAM_18K, DSP, FF, LUT, URAM</keys>
+</table>
+</item>
+<item name = "DSP"><table name="" hasTotal="0">
+<keys size="3">Instance, Module, Expression</keys>
+</table>
+</item>
+<item name = "Memory"><table name="" hasTotal="1">
+<keys size="10">Memory, Module, BRAM_18K, FF, LUT, URAM, Words, Bits, Banks, W*Bits*Banks</keys>
+</table>
+</item>
+<item name = "FIFO"><table name="" hasTotal="1">
+<keys size="8">Name, BRAM_18K, FF, LUT, URAM, Depth, Bits, Size:D*B</keys>
+</table>
+</item>
+<item name = "Expression"><table name="" hasTotal="1">
+<keys size="7">Variable Name, Operation, DSP, FF, LUT, Bitwidth P0, Bitwidth P1</keys>
+<column name="add_ln178_fu_94_p2">+, 0, 0, 38, 31, 1</column>
+<column name="ap_block_state1_pp0_stage0_iter0">and, 0, 0, 2, 1, 1</column>
+<column name="ap_block_state2_io">and, 0, 0, 2, 1, 1</column>
+<column name="ap_condition_173">and, 0, 0, 2, 1, 1</column>
+<column name="ap_condition_93">and, 0, 0, 2, 1, 1</column>
+<column name="icmp_ln178_fu_88_p2">icmp, 0, 0, 17, 31, 31</column>
+<column name="ap_block_pp0_stage0_01001">or, 0, 0, 2, 1, 1</column>
+<column name="ap_block_pp0_stage0_11001">or, 0, 0, 2, 1, 1</column>
+<column name="ap_enable_pp0">xor, 0, 0, 2, 1, 2</column>
+</table>
+</item>
+<item name = "Multiplexer"><table name="" hasTotal="1">
+<keys size="5">Name, LUT, Input Size, Bits, Total Bits</keys>
+<column name="ap_done_int">9, 2, 1, 2</column>
+<column name="ap_loop_exit_ready_pp0_iter1_reg">9, 2, 1, 2</column>
+<column name="ap_return">9, 2, 1, 2</column>
+<column name="ap_sig_allocacmp_i_load">9, 2, 31, 62</column>
+<column name="data_in_TDATA_blk_n">9, 2, 1, 2</column>
+<column name="data_out_TDATA_blk_n">9, 2, 1, 2</column>
+<column name="i_fu_44">9, 2, 31, 62</column>
+</table>
+</item>
+<item name = "Register"><table name="" hasTotal="1">
+<keys size="5">Name, FF, LUT, Bits, Const Bits</keys>
+<column name="ap_CS_fsm">1, 0, 1, 0</column>
+<column name="ap_done_reg">1, 0, 1, 0</column>
+<column name="ap_enable_reg_pp0_iter1">1, 0, 1, 0</column>
+<column name="ap_loop_exit_ready_pp0_iter1_reg">1, 0, 1, 0</column>
+<column name="ap_return_preg">1, 0, 1, 0</column>
+<column name="d_last_V_reg_129">1, 0, 1, 0</column>
+<column name="data_in_read_reg_124">128, 0, 128, 0</column>
+<column name="i_fu_44">31, 0, 31, 0</column>
+<column name="icmp_ln178_reg_120">1, 0, 1, 0</column>
+<column name="merge_reg_67">1, 0, 1, 0</column>
+</table>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Interface" level="0">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="6">RTL Ports, Dir, Bits, Protocol, Source Object, C Type</keys>
+<column name="ap_clk">in, 1, ap_ctrl_hs, paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1, return value</column>
+<column name="ap_rst">in, 1, ap_ctrl_hs, paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1, return value</column>
+<column name="ap_start">in, 1, ap_ctrl_hs, paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1, return value</column>
+<column name="ap_done">out, 1, ap_ctrl_hs, paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1, return value</column>
+<column name="ap_idle">out, 1, ap_ctrl_hs, paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1, return value</column>
+<column name="ap_ready">out, 1, ap_ctrl_hs, paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1, return value</column>
+<column name="ap_return">out, 1, ap_ctrl_hs, paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1, return value</column>
+<column name="data_in_TVALID">in, 1, axis, data_in, pointer</column>
+<column name="data_in_TDATA">in, 128, axis, data_in, pointer</column>
+<column name="data_in_TREADY">out, 1, axis, data_in, pointer</column>
+<column name="data_out_TREADY">in, 1, axis, data_out, pointer</column>
+<column name="data_out_TDATA">out, 128, axis, data_out, pointer</column>
+<column name="data_out_TVALID">out, 1, axis, data_out, pointer</column>
+<column name="num_samples">in, 31, ap_none, num_samples, scalar</column>
+</table>
+</item>
+</section>
+</profile>

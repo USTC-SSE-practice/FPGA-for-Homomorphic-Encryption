@@ -1,0 +1,10 @@
+20:40:28 **** Build of configuration Debug for project FL_Paillier_FPGA_APP_system ****
+make all 
+Generating bif file for the system project
+generate_system_bif.bat 52521 C:/Users/Administrator/VivadoProjects/Fl-pailler_fpga2/FL_Paillier_FPGA_Platform/export/FL_Paillier_FPGA_Platform/FL_Paillier_FPGA_Platform.xpfm standalone_domain C:/Users/Administrator/VivadoProjects/Fl-pailler_fpga2/FL_Paillier_FPGA_APP_system/Debug/system.bif
+sdcard_gen --xpfm C:/Users/Administrator/VivadoProjects/Fl-pailler_fpga2/FL_Paillier_FPGA_Platform/export/FL_Paillier_FPGA_Platform/FL_Paillier_FPGA_Platform.xpfm --sys_config FL_Paillier_FPGA_Platform --bif C:/Users/Administrator/VivadoProjects/Fl-pailler_fpga2/FL_Paillier_FPGA_APP_system/Debug/system.bif --bitstream C:/Users/Administrator/VivadoProjects/Fl-pailler_fpga2/FL_Paillier_FPGA_APP/_ide/bitstream/design_1_wrapper.bit --elf C:/Users/Administrator/VivadoProjects/Fl-pailler_fpga2/FL_Paillier_FPGA_APP/Debug/FL_Paillier_FPGA_APP.elf,ps7_cortexa9_0
+creating BOOT.BIN using C:/Users/Administrator/VivadoProjects/Fl-pailler_fpga2/FL_Paillier_FPGA_APP/_ide/bitstream/design_1_wrapper.bit
+Running C:/Xilinx/Vitis/2022.2/bin/bootgen  -image C:/Users/Administrator/VivadoProjects/Fl-pailler_fpga2/FL_Paillier_FPGA_APP_system/Debug/sd_card_temp/boot.bif -w -o i BOOT.BIN
+
+20:40:34 Build Finished (took 5s.750ms)
+

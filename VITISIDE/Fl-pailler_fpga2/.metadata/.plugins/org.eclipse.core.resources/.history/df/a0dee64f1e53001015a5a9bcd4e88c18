@@ -1,0 +1,42 @@
+#include "xparameters.h"
+#include "ff.h"           // FatFs file system
+#include "xil_printf.h"   // For xil_printf
+#include "xsdps.h"        // SD driver
+
+FATFS fatfs;
+FIL fil;
+FRESULT f_res;
+UINT br;
+
+int main()
+{
+    char file_name[] = "breast-cancer.csv";
+    char buffer[128];  // Adjust buffer size as needed
+
+    // Mount SD card
+    f_res = f_mount(&fatfs, "0:/", 1);
+    if (f_res != FR_OK) {
+        xil_printf("ERROR: Failed to mount SD card. Code: %d\n", f_res);
+        return -1;
+    }
+
+    // Open file
+    f_res = f_open(&fil, file_name, FA_READ);
+    if (f_res != FR_OK) {
+        xil_printf("ERROR: Failed to open file. Code: %d\n", f_res);
+        return -1;
+    }
+
+    xil_printf("Reading from file: %s\n", file_name);
+
+    // Read file line by line
+    while (!f_eof(&fil)) {
+        f_gets(buffer, sizeof(buffer), &fil);
+        xil_printf("%s", buffer);  // Display the content
+    }
+
+    f_close(&fil);
+    xil_printf("\nFile reading done.\n");
+
+    return 0;
+}

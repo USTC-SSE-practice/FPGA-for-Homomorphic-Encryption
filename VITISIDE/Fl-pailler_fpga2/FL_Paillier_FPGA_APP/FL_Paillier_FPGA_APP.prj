@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ASCII"?>
+<sdkproject:SdkProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdkproject="http://www.xilinx.com/sdkproject" name="FL_Paillier_FPGA_APP" location="C:/Users/Administrator/VivadoProjects/Fl-pailler_fpga2/FL_Paillier_FPGA_APP" platform="C:/Users/Administrator/VivadoProjects/Fl-pailler_fpga2/FL_Paillier_FPGA_Platform/export/FL_Paillier_FPGA_Platform/FL_Paillier_FPGA_Platform.xpfm" platformUID="xilinx:zc702::0.0(custom)" systemProject="FL_Paillier_FPGA_APP_system" sysConfig="FL_Paillier_FPGA_Platform" runtime="C/C++" cpu="standalone_domain" cpuInstance="ps7_cortexa9_0" os="standalone" mssSignature="bd0a7b3edbf2f8f6490998b2c6895b9e">
+  <configuration name="Debug" id="xilinx.gnu.armv7.exe.debug.2068816101">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+    <lastBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <configuration name="Release" id="xilinx.gnu.armv7.exe.release.475741937" dirty="true">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <template appTemplateName="hello_world"/>
+</sdkproject:SdkProject>

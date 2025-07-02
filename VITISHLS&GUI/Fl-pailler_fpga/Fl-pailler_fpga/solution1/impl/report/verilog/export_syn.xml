@@ -1,0 +1,164 @@
+<profile>
+  <RunData>
+    <RUN_TYPE>synth</RUN_TYPE>
+    <VIVADO_VERSION>v.2022.2</VIVADO_VERSION>
+    <ROOT_MODULE_CELL>bd_0_i/hls_inst</ROOT_MODULE_CELL>
+  </RunData>
+  <TimingReport>
+    <TargetClockPeriod>10.000</TargetClockPeriod>
+    <AchievedClockPeriod>6.520</AchievedClockPeriod>
+    <CLOCK_NAME>ap_clk</CLOCK_NAME>
+    <CP_FINAL>6.520</CP_FINAL>
+    <CP_ROUTE>NA</CP_ROUTE>
+    <CP_SYNTH>6.520</CP_SYNTH>
+    <CP_TARGET>10.000</CP_TARGET>
+    <SLACK_FINAL>3.480</SLACK_FINAL>
+    <SLACK_ROUTE/>
+    <SLACK_SYNTH>3.480</SLACK_SYNTH>
+    <TIMING_MET>TRUE</TIMING_MET>
+    <TNS_FINAL>0.000</TNS_FINAL>
+    <TNS_ROUTE>NA</TNS_ROUTE>
+    <TNS_SYNTH>0.000</TNS_SYNTH>
+    <WNS_FINAL>3.480</WNS_FINAL>
+    <WNS_ROUTE>NA</WNS_ROUTE>
+    <WNS_SYNTH>3.480</WNS_SYNTH>
+  </TimingReport>
+  <AreaReport>
+    <Resources>
+      <BRAM>0</BRAM>
+      <CLB>0</CLB>
+      <DSP>0</DSP>
+      <FF>841</FF>
+      <LATCH>0</LATCH>
+      <LUT>334</LUT>
+      <SRL>0</SRL>
+      <URAM>0</URAM>
+    </Resources>
+    <AvailableResources>
+      <BRAM>280</BRAM>
+      <CLB>0</CLB>
+      <DSP>220</DSP>
+      <FF>106400</FF>
+      <LUT>53200</LUT>
+      <URAM>0</URAM>
+    </AvailableResources>
+  </AreaReport>
+  <RtlModules>
+    <RtlModule CELL="inst" DEPTH="0" IS_TOP="1" TYPE="function" MODULENAME="paillier_fl_kernel" DISPNAME="inst" RTLNAME="paillier_fl_kernel">
+      <SubModules count="5">control_s_axi_U grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52 regslice_both_data_in_U regslice_both_data_out_U regslice_both_grad_stream_U</SubModules>
+      <Resources FF="841" LUT="334"/>
+      <LocalResources FF="37"/>
+    </RtlModule>
+    <RtlModule CELL="inst/control_s_axi_U" BINDMODULE="paillier_fl_kernel_control_s_axi" DEPTH="1" TYPE="rtl" MODULENAME="control_s_axi" DISPNAME="control_s_axi_U" RTLNAME="paillier_fl_kernel_control_s_axi">
+      <Resources FF="118" LUT="112"/>
+    </RtlModule>
+    <RtlModule CELL="inst/grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52" DEPTH="1" TYPE="function" MODULENAME="paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1" DISPNAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52" RTLNAME="paillier_fl_kernel_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1">
+      <SubModules count="1">flow_control_loop_pipe_sequential_init_U</SubModules>
+      <Resources FF="164" LUT="76"/>
+      <LocalResources FF="162" LUT="2"/>
+    </RtlModule>
+    <RtlModule CELL="inst/grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/flow_control_loop_pipe_sequential_init_U" BINDMODULE="paillier_fl_kernel_flow_control_loop_pipe_sequential_init" DEPTH="2" TYPE="rtl" MODULENAME="flow_control_loop_pipe_sequential_init" DISPNAME="flow_control_loop_pipe_sequential_init_U" RTLNAME="paillier_fl_kernel_flow_control_loop_pipe_sequential_init">
+      <Resources FF="2" LUT="74"/>
+    </RtlModule>
+    <RtlModule CELL="inst/regslice_both_data_in_U" BINDMODULE="paillier_fl_kernel_regslice_both" DEPTH="1" TYPE="rtl" MODULENAME="regslice_both" DISPNAME="regslice_both_data_in_U" RTLNAME="paillier_fl_kernel_regslice_both">
+      <Resources FF="260" LUT="73"/>
+    </RtlModule>
+    <RtlModule CELL="inst/regslice_both_data_out_U" BINDMODULE="paillier_fl_kernel_regslice_both" DEPTH="1" TYPE="rtl" MODULENAME="regslice_both" DISPNAME="regslice_both_data_out_U" RTLNAME="paillier_fl_kernel_regslice_both">
+      <Resources FF="260" LUT="71"/>
+    </RtlModule>
+    <RtlModule CELL="inst/regslice_both_grad_stream_U" BINDMODULE="paillier_fl_kernel_regslice_both" DEPTH="1" TYPE="rtl" MODULENAME="regslice_both" DISPNAME="regslice_both_grad_stream_U" RTLNAME="paillier_fl_kernel_regslice_both">
+      <Resources FF="2" LUT="2"/>
+    </RtlModule>
+  </RtlModules>
+  <TimingPaths>
+    <TPATH DATAPATH_DELAY="5.912" DATAPATH_LOGIC_DELAY="1.932" DATAPATH_NET_DELAY="3.980" ENDPOINT_PIN="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/i_fu_44_reg[0]/R" LOGIC_LEVELS="7" MAX_FANOUT="76" SLACK="3.480" STARTPOINT_PIN="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52_ap_start_reg_reg/C">
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52_ap_start_reg_reg" PRIMITIVE_TYPE="FLOP_LATCH.flop.FDRE" LINE_NUMBER="239"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/flow_control_loop_pipe_sequential_init_U/icmp_ln178_fu_88_p2_carry_i_3" PRIMITIVE_TYPE="LUT.others.LUT6" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry__0" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry__1" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry__2" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="regslice_both_data_in_U/i_fu_44[30]_i_4" PRIMITIVE_TYPE="LUT.others.LUT6" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/flow_control_loop_pipe_sequential_init_U/i_fu_44[30]_i_1" PRIMITIVE_TYPE="LUT.others.LUT2" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/i_fu_44_reg[0]" PRIMITIVE_TYPE="FLOP_LATCH.flop.FDRE" LINE_NUMBER="164"/>
+    </TPATH>
+    <TPATH DATAPATH_DELAY="5.912" DATAPATH_LOGIC_DELAY="1.932" DATAPATH_NET_DELAY="3.980" ENDPOINT_PIN="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/i_fu_44_reg[10]/R" LOGIC_LEVELS="7" MAX_FANOUT="76" SLACK="3.480" STARTPOINT_PIN="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52_ap_start_reg_reg/C">
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52_ap_start_reg_reg" PRIMITIVE_TYPE="FLOP_LATCH.flop.FDRE" LINE_NUMBER="239"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/flow_control_loop_pipe_sequential_init_U/icmp_ln178_fu_88_p2_carry_i_3" PRIMITIVE_TYPE="LUT.others.LUT6" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry__0" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry__1" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry__2" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="regslice_both_data_in_U/i_fu_44[30]_i_4" PRIMITIVE_TYPE="LUT.others.LUT6" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/flow_control_loop_pipe_sequential_init_U/i_fu_44[30]_i_1" PRIMITIVE_TYPE="LUT.others.LUT2" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/i_fu_44_reg[10]" PRIMITIVE_TYPE="FLOP_LATCH.flop.FDRE" LINE_NUMBER="164"/>
+    </TPATH>
+    <TPATH DATAPATH_DELAY="5.912" DATAPATH_LOGIC_DELAY="1.932" DATAPATH_NET_DELAY="3.980" ENDPOINT_PIN="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/i_fu_44_reg[11]/R" LOGIC_LEVELS="7" MAX_FANOUT="76" SLACK="3.480" STARTPOINT_PIN="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52_ap_start_reg_reg/C">
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52_ap_start_reg_reg" PRIMITIVE_TYPE="FLOP_LATCH.flop.FDRE" LINE_NUMBER="239"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/flow_control_loop_pipe_sequential_init_U/icmp_ln178_fu_88_p2_carry_i_3" PRIMITIVE_TYPE="LUT.others.LUT6" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry__0" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry__1" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry__2" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="regslice_both_data_in_U/i_fu_44[30]_i_4" PRIMITIVE_TYPE="LUT.others.LUT6" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/flow_control_loop_pipe_sequential_init_U/i_fu_44[30]_i_1" PRIMITIVE_TYPE="LUT.others.LUT2" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/i_fu_44_reg[11]" PRIMITIVE_TYPE="FLOP_LATCH.flop.FDRE" LINE_NUMBER="164"/>
+    </TPATH>
+    <TPATH DATAPATH_DELAY="5.912" DATAPATH_LOGIC_DELAY="1.932" DATAPATH_NET_DELAY="3.980" ENDPOINT_PIN="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/i_fu_44_reg[12]/R" LOGIC_LEVELS="7" MAX_FANOUT="76" SLACK="3.480" STARTPOINT_PIN="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52_ap_start_reg_reg/C">
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52_ap_start_reg_reg" PRIMITIVE_TYPE="FLOP_LATCH.flop.FDRE" LINE_NUMBER="239"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/flow_control_loop_pipe_sequential_init_U/icmp_ln178_fu_88_p2_carry_i_3" PRIMITIVE_TYPE="LUT.others.LUT6" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry__0" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry__1" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry__2" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="regslice_both_data_in_U/i_fu_44[30]_i_4" PRIMITIVE_TYPE="LUT.others.LUT6" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/flow_control_loop_pipe_sequential_init_U/i_fu_44[30]_i_1" PRIMITIVE_TYPE="LUT.others.LUT2" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/i_fu_44_reg[12]" PRIMITIVE_TYPE="FLOP_LATCH.flop.FDRE" LINE_NUMBER="164"/>
+    </TPATH>
+    <TPATH DATAPATH_DELAY="5.912" DATAPATH_LOGIC_DELAY="1.932" DATAPATH_NET_DELAY="3.980" ENDPOINT_PIN="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/i_fu_44_reg[13]/R" LOGIC_LEVELS="7" MAX_FANOUT="76" SLACK="3.480" STARTPOINT_PIN="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52_ap_start_reg_reg/C">
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52_ap_start_reg_reg" PRIMITIVE_TYPE="FLOP_LATCH.flop.FDRE" LINE_NUMBER="239"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/flow_control_loop_pipe_sequential_init_U/icmp_ln178_fu_88_p2_carry_i_3" PRIMITIVE_TYPE="LUT.others.LUT6" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry__0" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry__1" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/icmp_ln178_fu_88_p2_carry__2" PRIMITIVE_TYPE="CARRY.others.CARRY4" LINE_NUMBER="126"/>
+      <CELL NAME="regslice_both_data_in_U/i_fu_44[30]_i_4" PRIMITIVE_TYPE="LUT.others.LUT6" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/flow_control_loop_pipe_sequential_init_U/i_fu_44[30]_i_1" PRIMITIVE_TYPE="LUT.others.LUT2" LINE_NUMBER="126"/>
+      <CELL NAME="grp_paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1_fu_52/i_fu_44_reg[13]" PRIMITIVE_TYPE="FLOP_LATCH.flop.FDRE" LINE_NUMBER="164"/>
+    </TPATH>
+  </TimingPaths>
+  <VivadoReportFiles>
+    <ReportFile TYPE="design_analysis" PATH="verilog/report/paillier_fl_kernel_design_analysis_synth.rpt"/>
+    <ReportFile TYPE="failfast" PATH="verilog/report/paillier_fl_kernel_failfast_synth.rpt"/>
+    <ReportFile TYPE="timing" PATH="verilog/report/paillier_fl_kernel_timing_synth.rpt"/>
+    <ReportFile TYPE="timing_paths" PATH="verilog/report/paillier_fl_kernel_timing_paths_synth.rpt"/>
+    <ReportFile TYPE="utilization" PATH="verilog/report/paillier_fl_kernel_utilization_synth.rpt"/>
+    <ReportFile TYPE="utilization_hierarchical" PATH="verilog/report/paillier_fl_kernel_utilization_hierarchical_synth.rpt"/>
+  </VivadoReportFiles>
+  <GeneralInfo NAME="General Information">
+    <item NAME="Date" VALUE="Sat Jun 21 17:08:50 +0800 2025"/>
+    <item NAME="Version" VALUE="2022.2 (Build 3670227 on Oct 13 2022)"/>
+    <item NAME="Project" VALUE="Fl-pailler_fpga"/>
+    <item NAME="Solution" VALUE="solution1 (Vivado IP Flow Target)"/>
+    <item NAME="Product family" VALUE="zynq"/>
+    <item NAME="Target device" VALUE="xc7z020-clg484-1"/>
+  </GeneralInfo>
+  <RunOptions NAME="Run Constraints &amp; Options">
+    <General NAME="Design Constraints &amp; Options">
+      <item NAME="RTL Synthesis target clock" VALUE="10 ns"/>
+      <item NAME="C-Synthesis target clock" VALUE="10 ns"/>
+      <item NAME="C-Synthesis uncertainty" VALUE="27%"/>
+      <item NAME="config_export -ip_xdc_file" VALUE=""/>
+      <item NAME="config_export -ip_xdc_ooc_file" VALUE=""/>
+    </General>
+    <Syn NAME="RTL Synthesis Options">
+      <item NAME="config_export -vivado_synth_strategy" VALUE="default"/>
+      <item NAME="config_export -vivado_synth_design_args" VALUE="-directive sdx_optimization_effort_high"/>
+    </Syn>
+    <Reporting NAME="Reporting Options">
+      <item NAME="config_export -vivado_report_level" VALUE="2"/>
+      <item NAME="config_export -vivado_max_timing_paths" VALUE="10"/>
+    </Reporting>
+  </RunOptions>
+</profile>
+

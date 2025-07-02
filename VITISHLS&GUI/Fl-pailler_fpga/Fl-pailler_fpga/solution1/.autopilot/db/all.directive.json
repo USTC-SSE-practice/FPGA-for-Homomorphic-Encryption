@@ -1,0 +1,35 @@
+{"sourceFile": [{
+      "name": "",
+      "directive": [
+        {
+          "functionName": "paillier_fl_kernel",
+          "label": "",
+          "functionLabel": "",
+          "id": "1",
+          "sourceFile": "F:\/Fl-pailler_fpga\/Fl-pailler_fpga\/solution1\/directives.tcl",
+          "sourceLine": "6",
+          "pragma": {
+            "name": "TOP",
+            "option": [{
+                "name": "name",
+                "value": "paillier_fl_kernel"
+              }]
+          }
+        },
+        {
+          "functionName": "paillier_fl_kernel",
+          "label": "",
+          "functionLabel": "",
+          "id": "2",
+          "sourceFile": "F:\/Fl-pailler_fpga\/Fl-pailler_fpga\/solution1\/csynth.tcl",
+          "sourceLine": "16",
+          "pragma": {
+            "name": "TOP",
+            "option": [{
+                "name": "name",
+                "value": "paillier_fl_kernel"
+              }]
+          }
+        }
+      ]
+    }]}

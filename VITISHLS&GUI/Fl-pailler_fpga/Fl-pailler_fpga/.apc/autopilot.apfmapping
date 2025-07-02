@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<autopilotfilemapping:AutoPilotFileMapping xmlns:autopilotfilemapping="www.autoesl.com/autopilotfilemapping">
+  <source>
+    <originFiles name="paillier_hls.h" path="F:\Fl-pailler_fpga\src\paillier_hls.h"/>
+    <originFiles name="paillier_hls.cpp" path="F:\Fl-pailler_fpga\src\paillier_hls.cpp"/>
+  </source>
+  <testbench>
+    <originFiles name="paillier_hls_tb.cpp" path="F:\Fl-pailler_fpga\testbench_tb\paillier_hls_tb.cpp"/>
+  </testbench>
+</autopilotfilemapping:AutoPilotFileMapping>

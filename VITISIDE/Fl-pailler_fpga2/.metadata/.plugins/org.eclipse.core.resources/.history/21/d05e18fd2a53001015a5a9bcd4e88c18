@@ -1,0 +1,168 @@
+#include "ff.h"
+#include "xil_printf.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+
+// Define types for compatibility
+typedef unsigned long long paillier_uint64_t;
+
+// Dataset structure
+typedef struct {
+    paillier_uint64_t* features;
+    size_t count;
+} Dataset;
+
+// Function prototypes
+Dataset load_data_from_csv(const char* filename);
+void free_dataset(Dataset* dataset);
+
+// Mount SD card
+FATFS fatfs; // Filesystem object
+
+int init_sd_card() {
+    int status = f_mount(&fatfs, "0:/", 1); // Try to mount drive 0
+    if (status != FR_OK) {
+        xil_printf("ERROR: Failed to mount SD card (code %d)\n\r", status);
+        xil_printf("Possible causes:\n\r");
+        xil_printf(" - SD card not formatted as FAT32\n\r");
+        xil_printf(" - No valid filesystem found\n\r");
+        xil_printf(" - SD card not inserted or faulty\n\r");
+        return -1;
+    } else {
+        xil_printf("SUCCESS: SD card mounted\n\r");
+    }
+
+    return 0;
+}
+
+// Optional: List files on root directory
+void list_files() {
+    DIR dir;
+    FILINFO fno;
+
+    if (f_opendir(&dir, "0:/") == FR_OK) {
+        xil_printf("Files in root directory:\n\r");
+        while (f_readdir(&dir, &fno) == FR_OK && fno.fname[0] != 0) {
+            xil_printf("- %s\n\r", fno.fname);
+        }
+        f_closedir(&dir);
+    } else {
+        xil_printf("Failed to open root directory\n\r");
+    }
+}
+
+// Load data from CSV
+Dataset load_data_from_csv(const char* filename) {
+    Dataset dataset = {NULL, 0};
+    FILE* file = fopen(filename, "r");
+
+    if (!file) {
+        xil_printf("Error opening %s\n\r", filename);
+        return dataset;
+    }
+
+    xil_printf("File opened successfully: %s\n\r", filename);
+
+    // First pass: Count total lines
+    size_t line_count = 0;
+    char buffer[1024];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        line_count++;
+    }
+    xil_printf("Total lines in file: %zu\n\r", line_count);
+
+    rewind(file); // Rewind to beginning
+
+    // Skip header
+    fgets(buffer, sizeof(buffer), file);
+
+    // Allocate memory for all features
+    dataset.features = malloc((line_count - 1) * sizeof(paillier_uint64_t));
+    if (!dataset.features) {
+        xil_printf("Memory allocation failed\n\r");
+        fclose(file);
+        return dataset;
+    }
+
+    xil_printf("Allocated memory for up to %zu features\n\r", line_count - 1);
+
+    // Second pass: Parse data
+    int feature_index = 0;
+    while (fgets(buffer, sizeof(buffer), file)) {
+        char* token = strtok(buffer, ",");
+        if (!token) {
+            xil_printf("Skipping empty line\n\r");
+            continue;
+        }
+
+        // Skip first 3 tokens (columns)
+        for (int i = 0; i < 3; i++) {
+            token = strtok(NULL, ",");
+            if (!token) break;
+        }
+
+        if (!token) {
+            xil_printf("Skipping line with missing columns\n\r");
+            continue;
+        }
+
+        double value = atof(token);
+        if (value == 0 && strcmp(token, "0") != 0) {
+            xil_printf("Skipping invalid value: '%s'\n\r", token);
+            continue;
+        }
+
+        dataset.features[feature_index++] = (paillier_uint64_t)(value * 100);
+    }
+
+    dataset.count = feature_index;
+    xil_printf("Successfully loaded %zu features\n\r", dataset.count);
+
+    fclose(file);
+    return dataset;
+}
+
+void free_dataset(Dataset* dataset) {
+    if (dataset->features) {
+        free(dataset->features);
+        dataset->features = NULL;
+    }
+    dataset->count = 0;
+}
+
+int main(int argc, char** argv) {
+
+    // Step 1: Mount SD card
+    if (init_sd_card() != 0) {
+        xil_printf("SD card initialization failed.\n\r");
+        return -1;
+    }
+
+    // Step 2: Optional: List files on SD card
+    list_files();
+
+    // Step 3: Load dataset
+    Dataset dataset = load_data_from_csv("0:/breast-cancer.csv");
+
+    if (dataset.count == 0) {
+        xil_printf("ERROR: No feature loaded\n\r");
+        return -1;
+    }
+
+    xil_printf("Loaded %zu features successfully\n\r", dataset.count);
+
+    // Step 4: Print some sample features
+    xil_printf("First 10 features (scaled by 100):\n\r");
+    for (size_t i = 0; i < 10 && i < dataset.count; i++) {
+        xil_printf("%llu\n\r", dataset.features[i]);
+    }
+
+    // Step 5: Free dataset
+    free_dataset(&dataset);
+
+    xil_printf("Program completed successfully.\n\r");
+
+    return 0;
+}

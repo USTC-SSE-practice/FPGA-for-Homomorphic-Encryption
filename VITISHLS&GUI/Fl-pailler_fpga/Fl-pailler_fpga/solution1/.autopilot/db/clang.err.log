@@ -1,0 +1,4 @@
+src/paillier_hls.cpp:15:34: warning: unexpected pragma argument 'mul', expects function/operation [-Winvalid-hls-pragmas]
+#pragma HLS ALLOCATION instances=mul limit=1 resource=dsp
+                                 ^
+1 warning generated.

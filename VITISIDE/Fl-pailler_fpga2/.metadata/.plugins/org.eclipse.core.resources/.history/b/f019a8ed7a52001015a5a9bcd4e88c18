@@ -1,0 +1,30 @@
+#include "xpaillier_fl_kernel.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include "ff.h"
+#include "xil_printf.h"
+#include "xil_types.h"
+
+
+
+
+int main(int argc, char** argv) {
+	FATFS fatfs;
+
+	int init_sd_card() {
+	    int status;
+
+	    // Mount SD card as drive 0
+	    status = f_mount(&fatfs, "0:/", 1);
+	    if (status != FR_OK) {
+	        xil_printf("ERROR: Failed to mount SD card (code %d)\n\r", status);
+	        return -1;
+	    } else {
+	        xil_printf("SUCCESS: SD card mounted\n\r");
+	    }
+
+	    return 0;
+	}
+}

@@ -1,0 +1,6 @@
+//arch = zynq; split = false; format = BIN
+the_ROM_image:
+{
+	[bootloader]C:\Users\Administrator\VivadoProjects\Fl-pailler_fpga2\FL_Paillier_FPGA_APP\Debug\FL_Paillier_FPGA_APP.elf
+	[udf_bh]C:\Users\Administrator\VivadoProjects\Fl-pailler_fpga2\FL_Paillier_FPGA_APP\Debug\FL_Paillier_FPGA_APP.elf
+}

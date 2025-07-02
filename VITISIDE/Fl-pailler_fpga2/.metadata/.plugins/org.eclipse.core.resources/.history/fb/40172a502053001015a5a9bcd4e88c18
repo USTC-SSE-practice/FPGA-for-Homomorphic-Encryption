@@ -1,0 +1,44 @@
+#include "xparameters.h"
+#include "xil_printf.h"
+#include "xsdps.h"
+#include "ff.h"
+
+FATFS fatfs;
+FIL fil;
+FRESULT res;
+UINT bytes_read;
+
+int main()
+{
+    char *file = "0:/breast-cancer.csv";
+    char buffer[128];
+
+    // Mount SD card
+    res = f_mount(&fatfs, "0:/", 1);
+    if (res != FR_OK) {
+        xil_printf("Mount failed: %d\n", res);
+        return -1;
+    }
+
+    // Open file
+    res = f_open(&fil, file, FA_READ);
+    if (res != FR_OK) {
+        xil_printf("Open failed: %d\n", res);
+        return -1;
+    }
+
+    xil_printf("Reading file: %s\n", file);
+
+    while (1) {
+        memset(buffer, 0, sizeof(buffer));
+        res = f_read(&fil, buffer, sizeof(buffer) - 1, &bytes_read);
+        if (res != FR_OK || bytes_read == 0)
+            break;
+        buffer[bytes_read] = '\0';  // Ensure null-terminated
+        xil_printf("%s", buffer);
+    }
+
+    f_close(&fil);
+    xil_printf("Read complete.\n");
+    return 0;
+}

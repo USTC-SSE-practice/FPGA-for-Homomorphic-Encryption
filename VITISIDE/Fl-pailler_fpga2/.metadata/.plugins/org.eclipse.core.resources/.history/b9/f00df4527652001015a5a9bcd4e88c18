@@ -1,0 +1,9 @@
+FATFS fatfs;
+FRESULT res;
+
+// Mount the filesystem on the SD card
+res = f_mount(&fatfs, "0:", 1);
+if (res != FR_OK) {
+    xil_printf("Failed to mount SD card filesystem\n");
+    return -1;
+}

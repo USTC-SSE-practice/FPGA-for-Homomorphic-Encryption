@@ -1,0 +1,26 @@
+#include "xpaillier_fl_kernel.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include "ff.h"
+#include "xil_printf.h"
+#include "xil_types.h"
+
+
+
+
+int main(int argc, char** argv) {
+	FILE* test_file = fopen("0:/breast-cancer.csv", "r");
+	if (!test_file) {
+	    xil_printf("ERROR: Could not open file '0:/breast-cancer.csv'\n\r");
+	    xil_printf("Possible issues:\n\r");
+	    xil_printf(" - File does not exist\n\r");
+	    xil_printf(" - SD card not mounted\n\r");
+	    xil_printf(" - Incorrect file name or path\n\r");
+	    return -1;
+	} else {
+	    xil_printf("SUCCESS: File opened successfully\n\r");
+	    fclose(test_file);
+	}
+}

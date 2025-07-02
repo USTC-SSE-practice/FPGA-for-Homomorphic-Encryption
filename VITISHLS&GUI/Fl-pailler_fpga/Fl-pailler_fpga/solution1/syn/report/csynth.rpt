@@ -1,0 +1,143 @@
+
+
+================================================================
+== Synthesis Summary Report of 'paillier_fl_kernel'
+================================================================
++ General Information: 
+    * Date:           Sat Jun 21 16:57:10 2025
+    * Version:        2022.2 (Build 3670227 on Oct 13 2022)
+    * Project:        Fl-pailler_fpga
+    * Solution:       solution1 (Vivado IP Flow Target)
+    * Product family: zynq
+    * Target device:  xc7z020-clg484-1
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +-------------------------------------------------+------+------+---------+--------+----------+---------+------+----------+------+----+-----------+-----------+-----+
+    |                     Modules                     | Issue|      | Latency | Latency| Iteration|         | Trip |          |      |    |           |           |     |
+    |                     & Loops                     | Type | Slack| (cycles)|  (ns)  |  Latency | Interval| Count| Pipelined| BRAM | DSP|     FF    |    LUT    | URAM|
+    +-------------------------------------------------+------+------+---------+--------+----------+---------+------+----------+------+----+-----------+-----------+-----+
+    |+ paillier_fl_kernel                             |     -|  3.19|        -|       -|         -|        -|     -|        no|     -|   -|  316 (~0%)|  356 (~0%)|    -|
+    | + paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1  |     -|  3.19|        -|       -|         -|        -|     -|        no|     -|   -|  167 (~0%)|  132 (~0%)|    -|
+    |  o VITIS_LOOP_178_1                             |     -|  7.30|        -|       -|         2|        1|     -|       yes|     -|   -|          -|          -|    -|
+    +-------------------------------------------------+------+------+---------+--------+----------+---------+------+----------+------+----+-----------+-----------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* S_AXILITE Interfaces
++---------------+------------+---------------+--------+----------+
+| Interface     | Data Width | Address Width | Offset | Register |
++---------------+------------+---------------+--------+----------+
+| s_axi_control | 32         | 5             | 16     | 0        |
++---------------+------------+---------------+--------+----------+
+
+* S_AXILITE Registers
++---------------+-------------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| Interface     | Register    | Offset | Width | Access | Description                      | Bit Fields                                                           |
++---------------+-------------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| s_axi_control | CTRL        | 0x00   | 32    | RW     | Control signals                  | 0=AP_START 1=AP_DONE 2=AP_IDLE 3=AP_READY 7=AUTO_RESTART 9=INTERRUPT |
+| s_axi_control | GIER        | 0x04   | 32    | RW     | Global Interrupt Enable Register | 0=Enable                                                             |
+| s_axi_control | IP_IER      | 0x08   | 32    | RW     | IP Interrupt Enable Register     | 0=CHAN0_INT_EN 1=CHAN1_INT_EN                                        |
+| s_axi_control | IP_ISR      | 0x0c   | 32    | RW     | IP Interrupt Status Register     | 0=CHAN0_INT_ST 1=CHAN1_INT_ST                                        |
+| s_axi_control | num_samples | 0x10   | 32    | W      | Data signal of num_samples       |                                                                      |
+| s_axi_control | num_clients | 0x18   | 32    | W      | Data signal of num_clients       |                                                                      |
++---------------+-------------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+
+* AXIS
++-------------+---------------+-------+--------+--------+
+| Interface   | Register Mode | TDATA | TREADY | TVALID |
++-------------+---------------+-------+--------+--------+
+| data_in     | both          | 128   | 1      | 1      |
+| data_out    | both          | 128   | 1      | 1      |
+| grad_stream | both          | 128   | 1      | 1      |
++-------------+---------------+-------+--------+--------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------+
+| Interface | Type       | Ports     |
++-----------+------------+-----------+
+| ap_clk    | clock      | ap_clk    |
+| ap_rst_n  | reset      | ap_rst_n  |
+| interrupt | interrupt  | interrupt |
+| ap_ctrl   | ap_ctrl_hs |           |
++-----------+------------+-----------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++-------------+-----------+--------------------+
+| Argument    | Direction | Datatype           |
++-------------+-----------+--------------------+
+| data_in     | in        | stream<axis_t, 0>& |
+| grad_stream | unused    | stream<axis_t, 0>& |
+| data_out    | out       | stream<axis_t, 0>& |
+| num_samples | in        | int                |
+| num_clients | in        | int                |
++-------------+-----------+--------------------+
+
+* SW-to-HW Mapping
++-------------+---------------+-----------+---------------------------------------+
+| Argument    | HW Interface  | HW Type   | HW Info                               |
++-------------+---------------+-----------+---------------------------------------+
+| data_in     | data_in       | interface |                                       |
+| grad_stream | grad_stream   | interface |                                       |
+| data_out    | data_out      | interface |                                       |
+| num_samples | s_axi_control | register  | name=num_samples offset=0x10 range=32 |
+| num_clients | s_axi_control | register  | name=num_clients offset=0x18 range=32 |
++-------------+---------------+-----------+---------------------------------------+
+
+
+================================================================
+== Bind Op Report
+================================================================
++-------------------------------------------------+-----+--------+-----------+-----+--------+---------+
+| Name                                            | DSP | Pragma | Variable  | Op  | Impl   | Latency |
++-------------------------------------------------+-----+--------+-----------+-----+--------+---------+
+| + paillier_fl_kernel                            | 0   |        |           |     |        |         |
+|  + paillier_fl_kernel_Pipeline_VITIS_LOOP_178_1 | 0   |        |           |     |        |         |
+|    add_ln178_fu_94_p2                           | -   |        | add_ln178 | add | fabric | 0       |
++-------------------------------------------------+-----+--------+-----------+-----+--------+---------+
+
+
+================================================================
+== Bind Storage Report
+================================================================
+  No bind storage info in design
+
+================================================================
+== Pragma Report
+================================================================
+* Ignored Pragmas
++------------+---------------+------------------------------------+--------------------------------------------------------------+
+| Type       | Options       | Location                           | Messages                                                     |
++------------+---------------+------------------------------------+--------------------------------------------------------------+
+| allocation | instances=mul | src/paillier_hls.cpp:15 in mod_mul | unexpected pragma argument 'mul', expects function/operation |
++------------+---------------+------------------------------------+--------------------------------------------------------------+
+
+* Valid Pragma Syntax
++-----------+-------------------------------------------+-------------------------------------------------------------+
+| Type      | Options                                   | Location                                                    |
++-----------+-------------------------------------------+-------------------------------------------------------------+
+| inline    |                                           | src/paillier_hls.cpp:16 in mod_mul                          |
+| pipeline  | II=1                                      | src/paillier_hls.cpp:19 in mod_mul                          |
+| pipeline  | II=1                                      | src/paillier_hls.cpp:35 in mod_exp                          |
+| inline    |                                           | src/paillier_hls.cpp:81 in generate_keys                    |
+| pipeline  | II=1                                      | src/paillier_hls.cpp:96 in encrypt                          |
+| pipeline  | II=1                                      | src/paillier_hls.cpp:105 in decrypt                         |
+| pipeline  | II=1                                      | src/paillier_hls.cpp:150 in aggregate_gradients             |
+| interface | axis port=data_in                         | src/paillier_hls.cpp:170 in paillier_fl_kernel, data_in     |
+| interface | axis port=grad_stream                     | src/paillier_hls.cpp:171 in paillier_fl_kernel, grad_stream |
+| interface | axis port=data_out                        | src/paillier_hls.cpp:172 in paillier_fl_kernel, data_out    |
+| interface | s_axilite port=num_samples bundle=control | src/paillier_hls.cpp:173 in paillier_fl_kernel, num_samples |
+| interface | s_axilite port=num_clients bundle=control | src/paillier_hls.cpp:174 in paillier_fl_kernel, num_clients |
+| interface | s_axilite port=return bundle=control      | src/paillier_hls.cpp:175 in paillier_fl_kernel, return      |
+| pipeline  | II=1                                      | src/paillier_hls.cpp:179 in paillier_fl_kernel              |
++-----------+-------------------------------------------+-------------------------------------------------------------+
+
+
