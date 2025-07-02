@@ -80,12 +80,6 @@ The project implements a **** additive semi-homomorphic encryption using the Pai
 - Transferred data via UART, controlled the Sobel accelerator
 - Retrieved and returned results to GUI
 
-### 5. 🖼️ **GUI Development (Tkinter + Matplotlib)**
-- Load and preview MNIST images
-- Adjust Sobel threshold
-- Visualize original vs. edge-detected image
-
----
 
 ## 📦 Features
 
