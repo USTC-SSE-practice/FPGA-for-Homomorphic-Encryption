@@ -1,6 +1,3 @@
-# FPGA-for-Homomorphic-Encryption
-
-
 # FPGA-Accelerated Homomorphic Encryption for Federated Learning
 
 ![System Architecture](image/image2.png)  
@@ -117,22 +114,24 @@ The project implements a **** additive semi-homomorphic encryption using the Pai
 
 ## 🖥️ GUI Overview
 
-- Choose a digit image from MNIST
-- Set edge detection threshold
+- Breast cancer Dataset (CSV)
+- Connect the FPGA with Port COM3 and rate 115200
 - Run FPGA processing
-- View results (gradient X, Y, and magnitude)
+- Generate keys and encrypt data, decrypt, agregate, analyze
 
-<img src="gui_screenshot.jpg" alt="GUI Screenshot" width="500"/>
 
 ---
 
 ## ⚙️ How to Run
 
 ### 💾 Prerequisites:
-- Setup the dataset path in the GUI app
-- Setup the dataset path in test bench file for vitis HLS simulation
+- load the dataset path in the GUI app
 - Vivado + Vitis installed
-- Python ≥ 3.7 with required packages:
-```bash
-pip install numpy scipy pandas matplotlib pyserial
-s
+- Python ≥ 3.9 with required packages:
+
+## Installation & Usage
+1. **Simulation**:  
+   ```bash
+   cd src/software_simulation
+   g++ encrypt_decrypt.cpp -o paillier -lgmp
+   ./paillier
