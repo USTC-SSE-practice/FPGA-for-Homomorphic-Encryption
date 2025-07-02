@@ -3,7 +3,7 @@
 ![System Architecture](image/image2.png)  
 *Figure 1: FPGA-based secure federated learning pipeline with Paillier HE*
 
-A high-performance implementation of the **Paillier cryptosystem** on FPGA, enabling **privacy-preserving federated learning** for healthcare applications. This project leverages **Xilinx Vitis HLS** and **Vivado** to accelerate homomorphic encryption/decryption, reducing computational overhead by 15× compared to CPU.
+A high-performance implementation of the **Paillier cryptosystem** on FPGA, enabling **privacy-preserving federated learning** for healthcare applications. This project leverages **Xilinx Vitis HLS** and **Vivado** to accelerate homomorphic encryption/decryption.
 
 ## 🚀 Key Features
 - **Additive Homomorphic Encryption**: Securely aggregate encrypted model updates in federated learning.
@@ -57,12 +57,7 @@ The project implements a **** additive semi-homomorphic encryption using the Pai
 
 
 ## 🧪 Methodology
-
-### 1. 🧪 **Python Prototyping**
-- Implemented Sobel filter using NumPy + SciPy
-- Verified edge detection on MNIST digit images
-
-### 2. ⚙️ **High-Level Synthesis (HLS)**
+### 1. ⚙️ **High-Level Synthesis (HLS)**
 - Converted algorithm to C++
 - Applied FPGA optimizations:
   - Loop pipelining
@@ -70,7 +65,7 @@ The project implements a **** additive semi-homomorphic encryption using the Pai
   - Bit-width reduction (fixed-point)
   - Array partitioning & dataflow
 
-### 3. 🛠️ **Hardware Integration (Vivado)**
+### 2. 🛠️ **Hardware Integration (Vivado)**
 - Imported the HLS-generated IP into Vivado
 - Designed Zynq-based system with AXI interconnects
 - Enabled DDR and UART communication
@@ -117,11 +112,6 @@ The project implements a **** additive semi-homomorphic encryption using the Pai
 ---
 
 ## ⚙️ How to Run
-
-### 💾 Prerequisites:
-- load the dataset path in the GUI app
-- Vivado + Vitis installed
-- Python ≥ 3.9 with required packages:
 
 ## Installation & Usage
 1. **Simulation**:  
